@@ -5,7 +5,9 @@ const {
   HarmBlockThreshold,
 } = require("@google/generative-ai");
 
+const cors=require("cors");
 const app = express();
+app.use(cors());
 const port = 3000;
 require("dotenv").config();
 const API_KEY = process.env.API_KEY;
@@ -16,7 +18,7 @@ const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
 app.post("/", async (req, res) => {
   const userInput = req.body.userInput;
-
+  console.log(userInput);
   try {
     const generationConfig = {
       temperature: 0.5,
