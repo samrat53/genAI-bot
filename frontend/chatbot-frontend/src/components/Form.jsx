@@ -8,21 +8,23 @@ const Form = () => {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userInput }),
-    }).then(async (res) => {
-      const json = await res.json();
-      setHistory((prevHistory) => [
-        { question: userInput, response: json.response },
-        ...prevHistory,
-      ]);
-      setUserInput("");
-      setGetResponse(false);
-    });
+    if (userInput !== "") {
+      fetch(`http://localhost:3000/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userInput }),
+      }).then(async (res) => {
+        const json = await res.json();
+        setHistory((prevHistory) => [
+          { question: userInput, response: json.response },
+          ...prevHistory,
+        ]);
+        setUserInput("");
+        setGetResponse(false);
+      });
+    }
   }, [getResponse]);
 
   return (
@@ -36,11 +38,8 @@ const Form = () => {
             onChange={(e) => setUserInput(e.target.value)}
             className="input input-bordered input-info w-[30vw] mt-1"
           />
-          <button
-            className="btn mt-2"
-            onClick={() => setGetResponse(true)}
-          >
-            {getResponse?<Skeleton/>:"Send"}
+          <button className="btn mt-2" onClick={() => setGetResponse(true)}>
+            {getResponse ? <Skeleton /> : "Send"}
           </button>
         </div>
         <div className="history-container w-1/2">
